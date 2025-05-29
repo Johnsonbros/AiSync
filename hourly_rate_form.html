@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hourly Rate Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Find Your Hourly Rate</h1>
+    <form id="rateForm">
+        <label for="salary">Desired Annual Salary ($):</label>
+        <input type="number" id="salary" required>
+
+        <label for="expenses">Annual Business Expenses ($):</label>
+        <input type="number" id="expenses" required>
+
+        <label for="hours">Billable Hours per Week:</label>
+        <input type="number" id="hours" required>
+
+        <label for="vacation">Vacation Weeks per Year:</label>
+        <input type="number" id="vacation" value="2">
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('rateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const salary = parseFloat(document.getElementById('salary').value) || 0;
+            const expenses = parseFloat(document.getElementById('expenses').value) || 0;
+            const hoursPerWeek = parseFloat(document.getElementById('hours').value) || 0;
+            const vacationWeeks = parseFloat(document.getElementById('vacation').value) || 0;
+
+            const workingWeeks = 52 - vacationWeeks;
+            const totalBillableHours = hoursPerWeek * workingWeeks;
+
+            if (totalBillableHours <= 0) {
+                document.getElementById('result').textContent = 'Please enter valid hours and vacation weeks.';
+                return;
+            }
+
+            const totalCost = salary + expenses;
+            const hourlyRate = totalCost / totalBillableHours;
+
+            document.getElementById('result').textContent = `Your hourly rate should be approximately $${hourlyRate.toFixed(2)}`;
+        });
+    </script>
+</body>
+</html>
